@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- command: ./create_strimziKafkaCluster.sh test 3 3
+- shell: ./create_strimziKafkaCluster.sh test 3 3
   displayName: 'Strimzi kafka'
 
 #- script: |
