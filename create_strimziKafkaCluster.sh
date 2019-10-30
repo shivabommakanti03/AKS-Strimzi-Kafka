@@ -31,8 +31,8 @@ else
   zknodes=$3
 fi
 
-echo "creating namespace $namespace"
-kubectl create namespace $namespace
+#echo "creating namespace $namespace"
+#kubectl create namespace $namespace
 
 echo "applying strimzi installation files"
 cat strimzi-cluster-operator.yaml \
@@ -45,23 +45,23 @@ cat kafka-persistent.yaml \
   | sed -e "/replicas:.*/{s//replicas: $brokers/;:a" -e '$!N;$!ba' -e '}' \
   | kubectl apply -n $namespace -f -
 
-# echo "creating Prometheus deployment"
-# cat prometheus-install.yaml \
-#   | sed "s/namespace: .*/namespace: $namespace/" \
-#   | kubectl -n $namespace apply -f -
-#
-# echo "creating Grafana dashboard"
-# cat grafana/grafana-configmap.yaml \
-#   | sed "s/namespace: .*/namespace: $namespace/" \
-#   | kubectl -n $namespace apply -f -
-#
-# cat grafana/grafana-dashboard-configmap.yaml \
-#   | sed "s/namespace: .*/namespace: $namespace/" \
-#   | kubectl -n $namespace apply -f -
-#
-# cat grafana/grafana-deploy.yaml \
-#   | sed "s/namespace: .*/namespace: $namespace/" \
-#   | kubectl -n $namespace apply -f -
+echo "creating Prometheus deployment"
+cat prometheus-install.yaml \
+  | sed "s/namespace: .*/namespace: $namespace/" \
+  | kubectl -n $namespace apply -f -
+
+echo "creating Grafana dashboard"
+cat grafana/grafana-configmap.yaml \
+  | sed "s/namespace: .*/namespace: $namespace/" \
+  | kubectl -n $namespace apply -f -
+
+cat grafana/grafana-dashboard-configmap.yaml \
+  | sed "s/namespace: .*/namespace: $namespace/" \
+  | kubectl -n $namespace apply -f -
+
+cat grafana/grafana-deploy.yaml \
+  | sed "s/namespace: .*/namespace: $namespace/" \
+  | kubectl -n $namespace apply -f -
 
 echo "list of pods in the namespace:"
 kubectl get pods -n $namespace
